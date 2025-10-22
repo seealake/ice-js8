@@ -1,0 +1,17 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "Debug Live Preview",
+      "request": "launch",
+      "url": "http://localhost:3000/index.html"
+    },
+    {
+      "type": "node",
+      "name": "Debug Current File",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
