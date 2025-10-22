@@ -13,4 +13,9 @@ function powerRecursive(base, exp) {
 function power(base, exp) {
   // your code here
   // not "return base ** exp;"
+  let result = 1;
+  for (let i = 0; i < exp; i++) {
+    result *= base;
+  }
+  return result;
 }
