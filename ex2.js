@@ -60,8 +60,10 @@ function generateWeatherReport(shouldCelsius) {
       temp = (dayWeather.temps.F - 32) * (5 / 9);
       tempUnit = "C";
     }
+    // round to one decimal place for nicer output
+    const displayTemp = Math.round(temp * 10) / 10;
     forecastStrings.push(
-      `On ${dayWeather.weekday} it will be ${dayWeather.conditions} with a temperature of ${temp} degrees ${tempUnit}.`
+      `On ${dayWeather.weekday} it will be ${dayWeather.conditions} with a temperature of ${displayTemp} degrees ${tempUnit}.`
     );
   }
 
@@ -73,7 +75,8 @@ function generateWeatherReport(shouldCelsius) {
     if (shouldCelsius) {
       temp = (dayWeather.temps.F - 32) * (5 / 9);
     }
-    if (dayWeather.temps.F > maxTemp) {
+    // compare the converted temperature
+    if (temp > maxTemp) {
       maxTemp = temp;
       maxDay = dayWeather.weekday;
     }
@@ -84,16 +87,21 @@ function generateWeatherReport(shouldCelsius) {
     tempUnit = "C";
   }
   forecastStrings.push(
-    `The warmest day will be ${maxDay} with a temperature of ${maxTemp} degrees ${tempUnit}.`
+    `The warmest day will be ${maxDay} with a temperature of ${Math.round(maxTemp * 10) / 10} degrees ${tempUnit}.`
   );
 
+  // compute average using converted temperatures
   let sum = 0;
-  for (let i = 0; i < dailyWeatherObjects.length - 1; i++) {
-    sum += dailyWeatherObjects[i].temp;
+  for (const dayWeather of dailyWeatherObjects) {
+    let t = dayWeather.temps.F;
+    if (shouldCelsius) {
+      t = (t - 32) * (5 / 9);
+    }
+    sum += t;
   }
-  const averageTemp = sum / 7;
+  const averageTemp = sum / dailyWeatherObjects.length;
   forecastStrings.push(
-    `The average temperature next week will be ${averageTemp} degrees ${tempUnit}.`
+    `The average temperature next week will be ${Math.round(averageTemp * 10) / 10} degrees ${tempUnit}.`
   );
 
   return forecastStrings;
